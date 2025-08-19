@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up Page</title>
+  <style>
+    body {font-family: Arial; text-align: center; margin-top: 50px;}
+    input {margin: 10px; padding: 5px; width: 200px;}
+    button {padding: 10px;}
+  </style>
+</head>
+<body>
+  <h1>Welcome! Please Enter Your Details</h1>
+  <form id="myForm">
+    <input type="text" id="name" placeholder="Name" required><br>
+    <input type="tel" id="phone" placeholder="Phone Number" required><br>
+    <input type="text" id="address" placeholder="Address" required><br>
+    <button type="submit">Continue</button>
+  </form>
+  <p id="error" style="display:none;color:red;">Something went wrong, please try again!</p>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3srAsjRYfgoeIfGWY9WfIfWI-LR31Nkg",
+      authDomain: "start-a-football-club.firebaseapp.com",
+      projectId: "start-a-football-club",
+      storageBucket: "start-a-football-club.firebasestorage.app",
+      messagingSenderId: "110896698874",
+      appId: "1:110896698874:web:dea4e64deb12b573f18043",
+      measurementId: "G-KW4M8RRFHC"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    async function submitForm() {
+      let name = document.getElementById("name").value;
+      let phone = document.getElementById("phone").value;
+      let address = document.getElementById("address").value;
+      try {
+        await addDoc(collection(db, "userData"), { name, phone, address });
+        document.getElementById("error").style.display = "block";
+        document.getElementById("myForm").reset();
+      } catch (e) {
+        console.error("Error: ", e);
+        document.getElementById("error").style.display = "block";
+      }
+    }
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      submitForm();
+    });
+  </script>
+</body>
+</html>
